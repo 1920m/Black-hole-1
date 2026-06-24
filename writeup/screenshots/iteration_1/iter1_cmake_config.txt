@@ -1,0 +1,30 @@
+
+  # A modern, C++-native test framework for C++14 and above (links in default main)
+  catch2-with-main
+
+  # A modern, C++-native, test framework for C++14 and above
+  catch2
+
+The package glm provides CMake targets:
+
+    find_package(glm CONFIG REQUIRED)
+    target_link_libraries(main PRIVATE glm::glm)
+
+    # Or use the header-only version
+    find_package(glm CONFIG REQUIRED)
+    target_link_libraries(main PRIVATE glm::glm-header-only)
+
+Completed submission of catch2:x64-windows@3.14.0 to 1 binary cache(s) in 41 s
+Waiting for 1 remaining binary cache submissions...
+Completed submission of glm:x64-windows@1.0.3 to 1 binary cache(s) in 1.7 s (1/1)
+All requested installations completed successfully in: 7.4 min
+-- Running vcpkg install - done
+-- The CXX compiler identification is MSVC 19.44.35226.0
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/VC/Tools/MSVC/14.44.35207/bin/Hostx64/x64/cl.exe - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Configuring done (465.9s)
+-- Generating done (0.2s)
+-- Build files have been written to: C:/Users/CondorS/new black hole nda project/build/debug

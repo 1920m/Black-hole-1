@@ -1,0 +1,11 @@
+Test project C:/Users/CondorS/new black hole nda project/build/debug
+    Start 1: test_schwarzschild_limit
+1/3 Test #1: test_schwarzschild_limit .........   Passed    0.14 sec
+    Start 2: test_key_radii
+2/3 Test #2: test_key_radii ...................   Passed    0.12 sec
+    Start 3: test_conserved_quantities
+3/3 Test #3: test_conserved_quantities ........   Passed    0.15 sec
+
+100% tests passed, 0 tests failed out of 3
+
+Total Test time (real) =   0.66 sec

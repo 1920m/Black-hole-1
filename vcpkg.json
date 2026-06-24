@@ -1,0 +1,10 @@
+{
+  "name": "kerr-blackhole-sim",
+  "version-string": "0.1.0",
+  "description": "Physically accurate real-time Kerr black hole ray tracer. Phase 0: pure-CPU physics core (metric + Carter-separated geodesics) with Catch2 unit tests.",
+  "homepage": "https://example.invalid/kerr-blackhole-sim",
+  "dependencies": [
+    "catch2",
+    "glm"
+  ]
+}

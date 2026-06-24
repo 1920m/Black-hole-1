@@ -1,0 +1,14 @@
+# Build output
+/build/
+/out/
+**/vcpkg_installed/
+
+# IDE / tooling
+.vs/
+.vscode/
+*.user
+CMakeUserPresets.json
+
+# OS
+Thumbs.db
+desktop.ini

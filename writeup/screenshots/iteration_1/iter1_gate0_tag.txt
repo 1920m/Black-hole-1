@@ -1,0 +1,5 @@
+8b4846d (HEAD -> master, tag: iteration-1-gate-0) test: Gate 0 — all three Catch2 suites green (NEA evidence)
+0c5385b test: Gate 0 Catch2 suites (Schwarzschild limit, key radii, conserved quantities)
+6a49311 feat: KerrMetric + Carter-separated null geodesic RK4 integrator (Phase 0)
+53e0936 build: CMake + Ninja + vcpkg manifest (Catch2, glm), C++20 scaffold (Phase 0)
+3efa4e5 chore: initial project scaffold and planning docs

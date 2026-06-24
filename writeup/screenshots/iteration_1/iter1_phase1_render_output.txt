@@ -1,0 +1,6 @@
+[2/4] Linking CXX static library physics\kerr_physics.lib
+[3/4] Building CXX object physics\CMakeFiles\render_reference_schwarzschild.dir\tools\render_reference_schwarzschild.cpp.obj
+[4/4] Linking CXX executable physics\render_reference_schwarzschild.exe
+Rendering 300x300 Schwarzschild reference (r_obs=30.0M, i=85deg)...
+Wrote validation/reference_images/schwarzschild_shadow_cpu.png
+Measured shadow b_c = 5.1962 M   (analytic 3*sqrt(3) = 5.1962 M, err 0.000%)

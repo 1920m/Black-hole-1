@@ -1,0 +1,5 @@
+FAILED: [code=2] physics/CMakeFiles/render_reference_schwarzschild.dir/tools/render_reference_schwarzschild.cpp.obj 
+C:\Users\CondorS\new black hole nda project\physics\tools\render_reference_schwarzschild.cpp(21): error C3083: 'numbers': the symbol to the left of a '::' must be a type
+C:\Users\CondorS\new black hole nda project\physics\tools\render_reference_schwarzschild.cpp(21): error C2039: 'pi_v': is not a member of 'std'
+C:\Users\CondorS\new black hole nda project\physics\tools\render_reference_schwarzschild.cpp(21): error C2065: 'pi_v': undeclared identifier
+C:\Users\CondorS\new black hole nda project\physics\tools\render_reference_schwarzschild.cpp(21): error C2062: type 'double' unexpected

@@ -1,0 +1,12 @@
+    Start 1: test_schwarzschild_limit
+1/4 Test #1: test_schwarzschild_limit .........   Passed    0.24 sec
+    Start 2: test_key_radii
+2/4 Test #2: test_key_radii ...................   Passed    0.15 sec
+    Start 3: test_conserved_quantities
+3/4 Test #3: test_conserved_quantities ........   Passed    0.24 sec
+    Start 4: test_shadow_size
+4/4 Test #4: test_shadow_size .................   Passed    0.63 sec
+
+100% tests passed, 0 tests failed out of 4
+
+Total Test time (real) =   1.73 sec

@@ -1,0 +1,8 @@
+017f368 (HEAD -> main, tag: iteration-1-complete) docs: Phase 1 reference image, Iteration 1 writeup, NEA evidence screenshots
+f89c3cd feat: CPU Schwarzschild reference ray tracer + shadow-size test (Phase 1)
+af99f00 docs: Gate 0 git-log tag evidence screenshot
+df7d658 (tag: iteration-1-gate-0) test: Gate 0 — all three Catch2 suites green (NEA evidence)
+ba1aa96 test: Gate 0 Catch2 suites (Schwarzschild limit, key radii, conserved quantities)
+3cf761c feat: KerrMetric + Carter-separated null geodesic RK4 integrator (Phase 0)
+de783ee build: CMake + Ninja + vcpkg manifest (Catch2, glm), C++20 scaffold (Phase 0)
+e072c33 chore: initial project scaffold and planning docs

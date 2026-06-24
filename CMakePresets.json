@@ -9,6 +9,7 @@
       "binaryDir": "${sourceDir}/build/debug",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Debug",
+        "VCPKG_INSTALLED_DIR": "${sourceDir}/build/debug/vcpkg_installed",
         "CMAKE_TOOLCHAIN_FILE": "C:/vcpkg/scripts/buildsystems/vcpkg.cmake",
         "VCPKG_TARGET_TRIPLET": "x64-windows",
         "CMAKE_MAKE_PROGRAM": "C:/vcpkg/downloads/tools/ninja-1.13.2-windows/ninja.exe"
@@ -21,6 +22,7 @@
       "binaryDir": "${sourceDir}/build/release",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Release",
+        "VCPKG_INSTALLED_DIR": "${sourceDir}/build/debug/vcpkg_installed",
         "CMAKE_TOOLCHAIN_FILE": "C:/vcpkg/scripts/buildsystems/vcpkg.cmake",
         "VCPKG_TARGET_TRIPLET": "x64-windows",
         "CMAKE_MAKE_PROGRAM": "C:/vcpkg/downloads/tools/ninja-1.13.2-windows/ninja.exe"

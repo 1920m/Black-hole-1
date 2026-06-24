@@ -1,11 +1,13 @@
 # kerr_physics — pure-CPU physics core (GLM only) plus Catch2 test suites.
 find_package(glm CONFIG REQUIRED)
 find_package(Catch2 3 CONFIG REQUIRED)
+find_package(Stb REQUIRED)
 
 add_library(kerr_physics STATIC
   src/constants.cpp
   src/metric.cpp
   src/geodesics.cpp
+  src/raytrace_cpu.cpp
 )
 target_include_directories(kerr_physics
   PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
@@ -24,3 +26,9 @@ endfunction()
 add_physics_test(test_schwarzschild_limit)
 add_physics_test(test_key_radii)
 add_physics_test(test_conserved_quantities)
+add_physics_test(test_shadow_size)
+
+# --- Phase 1 reference renderer (CPU ground-truth image) ---------------------
+add_executable(render_reference_schwarzschild tools/render_reference_schwarzschild.cpp)
+target_link_libraries(render_reference_schwarzschild PRIVATE kerr_physics)
+target_include_directories(render_reference_schwarzschild PRIVATE ${Stb_INCLUDE_DIR})

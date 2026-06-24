@@ -5,6 +5,7 @@
   "homepage": "https://example.invalid/kerr-blackhole-sim",
   "dependencies": [
     "catch2",
-    "glm"
+    "glm",
+    "stb"
   ]
 }

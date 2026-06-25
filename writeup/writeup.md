@@ -424,3 +424,50 @@ All three checks passed on the first run. The most striking diagnostic was the s
 10. `screenshots/iteration_2/iter2_ctest_gate2.png` — 5 Catch2 suites passing.
 11. `screenshots/iteration_2/iter2_framedrag_theta.png` — measured frame dragging (2.791 rad) and θ-oscillation.
 12. `screenshots/iteration_2/iter2_kerr_test.png` — the Kerr geodesics test suite.
+
+---
+---
+
+# ITERATION 3 — Lopsided Kerr Shadow & Relativistic Disk Emission (Phases 3–4)
+*(Closes two gates: `iteration-2-complete` = the spinning shadow renders lopsided (Phase 3); `iteration-3-complete` = the accretion disk shows relativistic beaming, the lensed far side, and an ISCO inner edge (Phase 4). Both are demonstrated by the single render in Fig. 14.)*
+
+With the Kerr geodesics proven correct (Iteration 2), this iteration finally turns them into a picture and adds the physics that makes an accreting black hole *look* the way it does. It produces the first image that is impossible for any of the old project's approximations to reproduce correctly: a spinning black hole with a Doppler-beamed disk.
+
+## 1. Design
+**Phase 3 (lopsided shadow).** No new tracing code is needed — the CPU reference tracer from Iteration 1 already launches rays through the full Kerr metric. Rendering at a\* = 0.9 instead of 0 is enough to produce the asymmetric shadow, because frame dragging shifts the capture cross-section sideways. The shape is quantified with `critical_impact_parameter()` measured along opposite image directions.
+
+**Phase 4 (disk emission).** A new module, `disk.hpp/.cpp` (Fig. 13), adds the emission physics for a thin, optically thick, prograde equatorial disk (the project specification §10):
+- **Redshift factor** `g = √(r³ − 3r² + 2a·r^{3/2}) / ((r^{3/2}+a) − b)`, combining gravitational time dilation with the orbital Doppler shift for a photon of impact parameter `b = L_z/E`.
+- **Relativistic beaming** `I_obs ∝ g⁴` — the single most visually dominant effect.
+- **Temperature** `T ∝ (r_inner/r)^{3/4}` with the inner edge pinned to `r_ISCO(a*)`.
+- **Blackbody colour** ramp (red → orange/white → blue), driven by the *observed* colour temperature `g·T`, so the approaching side shifts blue and the receding side red.
+
+These feed the tracer's disk-hit branch: each disk pixel is shaded by `blackbody_color(g·T)` scaled by a Reinhard-tone-mapped `g⁴·T⁴` brightness.
+
+## 2. Development
+`disk.cpp` was implemented and unit-tested in isolation first (Stage 1), then wired into `render_image()` (Stage 2), and a dedicated tool `render_kerr_disk.cpp` renders a\*=0.9 at 80° inclination. The disk inner edge is set programmatically to `KerrMetric::r_isco_prograde()` (= 2.321 M at a\*=0.9), never a constant.
+
+## 3. Iteration
+The first render (correct physics, default exposure) came out **almost entirely black** — only the bright approaching inner edge was visible. Diagnosis: the `g⁴` beaming spans an enormous dynamic range, so a linear exposure crushed everything else to zero. The fix was a tone-mapping change only (raise exposure, add a 1/2.2 gamma curve); the physics and the measured numbers were unchanged. The second render (Fig. 14) shows the full disk with the asymmetry intact — a clean example of separating a *display* problem from a *physics* problem.
+
+## 4. Testing (Gates 3 & 4)
+
+| Case | What it checks | Expected | Measured | Result |
+|---|---|---|---|---|
+| Kerr shadow lopsided (SC2) | shadow edge, +α vs −α, a\*=0.9 | edges differ; a\*=0 equal | **+α = 6.832 M, −α = 2.844 M (Δ = 3.99 M)**; a\*=0 symmetric | **Pass** |
+| Disk redshift | g approaching vs receding, r=6 | g_app > 1 > g_rec; baseline √(1−3/r) | as expected | **Pass** |
+| Beaming asymmetry (SC6) | I_obs(app)/I_obs(rec) | ≥ 4× | **17.0×** | **Pass** |
+| Temperature / ISCO edge (SC7) | T(r) falls; inner edge = r_ISCO | 6 M at a\*=0, < 6 M at high spin | inner edge **2.321 M** at a\*=0.9 | **Pass** |
+
+`ctest` now reports **7/7 suites green** across Phases 0–4 (Fig. 17). The render (Fig. 14) visibly satisfies the Phase 4 gate: the approaching side of the disk is far brighter and bluer than the receding side, the far side of the disk is gravitationally lensed up and over the shadow, and the shadow itself is flattened on the prograde side.
+
+**Success criteria met:** SC2 (lopsided Kerr shadow) ✓, SC6 (≥4× beaming asymmetry) ✓, SC7 (ISCO inner edge tracks a\*) ✓ — alongside SC1/SC3 from earlier. Remaining ambitious criteria (SC4 Sgr A* angular calibration, SC5 real-time GPU frame rate, SC12 zero Vulkan validation errors) belong to the GPU iterations.
+
+*Known limitation:* a faint seam persists along the `L_z≈0` image meridian (under-sampled higher-order lensing); adaptive supersampling there is noted as future work.
+
+### Figures
+13. `screenshots/iteration_3/iter3_disk_header.png` — disk emission interface.
+14. `screenshots/iteration_3/iter3_kerr_disk.png` — **the headline render**: a\*=0.9 lopsided shadow + Doppler-beamed disk.
+15. `screenshots/iteration_3/iter3_kerr_render_output.png` — measured shadow asymmetry and ISCO inner edge.
+16. `screenshots/iteration_3/iter3_disk_beaming.png` — beaming brightness ratio (17×).
+17. `screenshots/iteration_3/iter3_ctest_gate4.png` — all 7 Catch2 suites passing.

@@ -1,0 +1,2 @@
+brightness ratio = 17.0238
+All tests passed (9 assertions in 3 test cases)

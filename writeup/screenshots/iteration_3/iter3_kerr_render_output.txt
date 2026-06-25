@@ -1,0 +1,4 @@
+[3/3] Linking CXX executable physics\render_kerr_disk.exe
+Rendering Kerr disk: a*=0.90, i=80deg, ISCO inner edge=2.321 M ...
+Wrote validation/reference_images/kerr_disk_cpu.png
+Shadow edges (equatorial): +alpha=6.832 M  -alpha=2.844 M  asymmetry=3.988 M

@@ -1,0 +1,6 @@
+aeeea30 (HEAD -> main, tag: iteration-2-gate-2) docs: Iteration 2 writeup + Gate 2 evidence (frame dragging 2.791 rad, spherical orbit)
+65e73b2 feat: Kerr geodesics validation — frame dragging, theta-oscillation, Q@a*=0.9 (Phase 2)
+71fc79d (origin/main) docs: Iteration 1 git-log/tag evidence screenshot
+017f368 (tag: iteration-1-complete) docs: Phase 1 reference image, Iteration 1 writeup, NEA evidence screenshots
+f89c3cd feat: CPU Schwarzschild reference ray tracer + shadow-size test (Phase 1)
+af99f00 docs: Gate 0 git-log tag evidence screenshot

@@ -1,0 +1,7 @@
+e599a6e (HEAD -> main, tag: iteration-3-complete, tag: iteration-2-complete) docs: Iteration 3 writeup + Kerr disk render + Gate 3/4 evidence
+b9cb00b feat: relativistic disk emission (redshift, g^4 beaming, blackbody) + lopsided Kerr render (Phases 3-4)
+6bdf85a (origin/main) docs: use neutral 'project specification' wording in writeup prose and code-figure screenshots
+1cac416 docs: Gate 2 git-log/tag evidence screenshot
+aeeea30 (tag: iteration-2-gate-2) docs: Iteration 2 writeup + Gate 2 evidence (frame dragging 2.791 rad, spherical orbit)
+65e73b2 feat: Kerr geodesics validation — frame dragging, theta-oscillation, Q@a*=0.9 (Phase 2)
+71fc79d docs: Iteration 1 git-log/tag evidence screenshot

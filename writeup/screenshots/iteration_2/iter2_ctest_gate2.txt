@@ -1,0 +1,14 @@
+    Start 1: test_schwarzschild_limit
+1/5 Test #1: test_schwarzschild_limit .........   Passed    0.16 sec
+    Start 2: test_key_radii
+2/5 Test #2: test_key_radii ...................   Passed    0.14 sec
+    Start 3: test_conserved_quantities
+3/5 Test #3: test_conserved_quantities ........   Passed    0.13 sec
+    Start 4: test_shadow_size
+4/5 Test #4: test_shadow_size .................   Passed    0.86 sec
+    Start 5: test_kerr_geodesics
+5/5 Test #5: test_kerr_geodesics ..............   Passed    0.16 sec
+
+100% tests passed, 0 tests failed out of 5
+
+Total Test time (real) =   1.91 sec

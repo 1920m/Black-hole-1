@@ -385,3 +385,42 @@ Testing in this iteration is **automated and analytic**: every assertion compare
 7. `screenshots/iteration_1/iter1_ctest_phase1.png` — all 4 Catch2 suites passing.
 8. `screenshots/iteration_1/iter1_schwarzschild_shadow.png` — CPU reference image (`validation/reference_images/schwarzschild_shadow_cpu.png`).
 9. `screenshots/iteration_1/iter1_gate0_tag.png` — git history with the `iteration-1-gate-0` tag.
+
+---
+---
+
+# ITERATION 2 — Kerr (Spinning) Black Hole Geodesics
+*(CLAUDE.md Phase 2. Gate `iteration-2-gate-2` = Kerr θ-oscillation confirmed and Carter's Q conserved. The remainder of this iteration — the lopsided Kerr CPU shadow render, Gate 3 / `iteration-2-complete` — is still ahead.)*
+
+The review's most fundamental physics complaint was that the old project **faked spin**: it bolted a weak-field Lense-Thirring term (`frameDrag = spin·rs²·2.5/r⁴ · (spinVec × pos)`) onto a Newtonian acceleration. That term is only valid far from the hole, so the spinning shadow it produced was not physically meaningful. This iteration proves the rebuilt integrator carries **genuine Kerr physics** all the way down to the photon sphere.
+
+## 1. Design
+A key architectural pay-off surfaces here: the geodesic integrator built in Iteration 1 is **already full Kerr**. The super-Hamiltonian `H = ½ gᵘᵛ pᵤ pᵥ` uses the complete inverse Kerr metric, including the off-diagonal `g_tφ` term that *is* frame dragging, and `KerrMetric` already carries the spin `a`. So Phase 2 needs **no new physics code** — it is validation-led, designed to prove the spin terms are physically active rather than inert.
+
+Three independent, observable spin signatures were chosen as tests:
+1. **Carter's Q conserved at high spin (a\*=0.9)** — the integrator must stay healthy in the strong-spin regime, not just at a*=0.5.
+2. **Frame dragging (Lense-Thirring)** — a photon with *zero* axial angular momentum (L_z=0) must still be swept around in azimuth φ by a spinning hole, and must *not* be for a non-spinning one. This isolates the `g_tφ` term.
+3. **Latitudinal (θ) oscillation** — a non-equatorial photon must bounce between Carter turning points in θ. To make this clean and sustained, the test uses a **spherical photon orbit** (constant r) with the analytic constants L(r_s), Q(r_s) of Teo (2003).
+
+## 2. Development
+A single new suite, `test_kerr_geodesics.cpp` (Fig. 12), was added — no changes to the physics library, which is itself strong evidence that the Iteration 1 design generalised correctly to spin. The frame-dragging test drops an L_z=0, Q=0 photon from r=15 M on the equator and integrates to the horizon, comparing the accumulated Δφ at a\*=0 against a\*=0.9. The θ-test places a photon on the spherical orbit at r_s = 2.5 M (which lies between the prograde 1.56 M and retrograde 3.91 M photon spheres for a\*=0.9, so the orbit exists), starting on the equator with p_θ = √Q, and counts the reversals of p_θ.
+
+## 3. Iteration
+All three checks passed on the first run. The most striking diagnostic was the spherical orbit holding its radius to **[2.49995, 2.5] M** through a full latitude swing — confirming that the `make_null_state` null-condition solver placed the photon onto the orbit essentially exactly, and that RK4 + the finite-difference forces hold an *unstable* orbit cleanly over the test span. No tuning was needed.
+
+## 4. Testing (Gate 2)
+
+| Case | What it checks | Expected | Measured | Result |
+|---|---|---|---|---|
+| Q conserved (a\*=0.9) | \|ΔQ\|/Q and \|H\| over 100 RK4 steps | < 1×10⁻⁶ | within tol | **Pass** |
+| Frame dragging | Δφ for L_z=0 photon, a\*=0 vs 0.9 | a\*=0 → 0; a\*=0.9 → large | **0 vs 2.791 rad (~160°)** | **Pass** |
+| θ-oscillation | p_θ turning points; latitude range; r constant; Q held | ≥2 turns, real swing, r≈const | **2 turns, θ∈[0.045, 3.097], r∈[2.49995, 2.5]** | **Pass** |
+
+`ctest` reports **5/5 suites passing** (Fig. 10). The frame-dragging measurement (Fig. 11) is the headline result: a photon with no angular momentum of its own is dragged **2.791 radians** around an a\*=0.9 hole purely by the rotation of spacetime, versus **exactly 0** with no spin — the defining Kerr signature, computed from the real equations rather than a far-field approximation.
+
+**Success criteria progress:** SC3 (conserved-quantity drift) re-confirmed at high spin. SC2 (visibly lopsided Kerr *shadow*) is the next step — the geodesics are now proven correct, so the remaining work is to feed them through the CPU ray tracer at a\*≠0 and render the flattened shadow (Gate 3).
+
+### Figures
+10. `screenshots/iteration_2/iter2_ctest_gate2.png` — 5 Catch2 suites passing.
+11. `screenshots/iteration_2/iter2_framedrag_theta.png` — measured frame dragging (2.791 rad) and θ-oscillation.
+12. `screenshots/iteration_2/iter2_kerr_test.png` — the Kerr geodesics test suite.

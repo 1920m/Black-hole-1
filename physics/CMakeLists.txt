@@ -27,6 +27,7 @@ add_physics_test(test_schwarzschild_limit)
 add_physics_test(test_key_radii)
 add_physics_test(test_conserved_quantities)
 add_physics_test(test_shadow_size)
+add_physics_test(test_kerr_geodesics)
 
 # --- Phase 1 reference renderer (CPU ground-truth image) ---------------------
 add_executable(render_reference_schwarzschild tools/render_reference_schwarzschild.cpp)

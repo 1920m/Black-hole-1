@@ -8,6 +8,7 @@ add_library(kerr_physics STATIC
   src/metric.cpp
   src/geodesics.cpp
   src/raytrace_cpu.cpp
+  src/disk.cpp
 )
 target_include_directories(kerr_physics
   PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
@@ -28,8 +29,14 @@ add_physics_test(test_key_radii)
 add_physics_test(test_conserved_quantities)
 add_physics_test(test_shadow_size)
 add_physics_test(test_kerr_geodesics)
+add_physics_test(test_disk_emission)
+add_physics_test(test_kerr_shadow)
 
 # --- Phase 1 reference renderer (CPU ground-truth image) ---------------------
 add_executable(render_reference_schwarzschild tools/render_reference_schwarzschild.cpp)
 target_link_libraries(render_reference_schwarzschild PRIVATE kerr_physics)
 target_include_directories(render_reference_schwarzschild PRIVATE ${Stb_INCLUDE_DIR})
+
+add_executable(render_kerr_disk tools/render_kerr_disk.cpp)
+target_link_libraries(render_kerr_disk PRIVATE kerr_physics)
+target_include_directories(render_kerr_disk PRIVATE ${Stb_INCLUDE_DIR})

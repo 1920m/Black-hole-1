@@ -4,6 +4,9 @@
 #include <cmath>
 #include <numbers>
 
+#include <glm/glm.hpp>
+
+#include "kerr_physics/disk.hpp"
 #include "kerr_physics/geodesics.hpp"
 
 namespace kerr {
@@ -110,6 +113,10 @@ std::vector<std::uint8_t> render_image(const KerrMetric& metric,
   std::vector<std::uint8_t> img(
       static_cast<std::size_t>(cam.width) * cam.height * 3, 0);
 
+  const double sin_o = std::sin(cam.theta_obs);
+  const double spin = metric.spin();
+  const double disk_exposure = 18.0;  // tone-mapping exposure for the g⁴·T⁴ brightness
+
   for (int py = 0; py < cam.height; ++py) {
     for (int px = 0; px < cam.width; ++px) {
       double acc_r = 0.0, acc_g = 0.0, acc_b = 0.0;
@@ -126,14 +133,18 @@ std::vector<std::uint8_t> render_image(const KerrMetric& metric,
             case RayOutcome::Horizon:
               break;  // the shadow contributes (0,0,0)
             case RayOutcome::Disk: {
-              const double t = std::clamp(
-                  (r.disk_radius - disk.r_inner) / (disk.r_outer - disk.r_inner),
-                  0.0, 1.0);
-              // inner: hot near-white; outer: deep orange (placeholder for the
-              // physical Novikov-Thorne profile added in Phase 4).
-              acc_r += lerp(255.0, 190.0, t);
-              acc_g += lerp(248.0, 70.0, t);
-              acc_b += lerp(230.0, 25.0, t);
+              // Relativistic disk emission: gravitational + Doppler redshift g,
+              // beaming I_obs ∝ g⁴, thin-disk temperature, blackbody colour.
+              const double b = -alpha * sin_o;  // photon axial impact parameter L_z/E
+              const double g = disk_redshift_factor(r.disk_radius, spin, b);
+              const double temp = disk_temperature(r.disk_radius, disk.r_inner);
+              const double bright = disk_observed_brightness(g, temp);
+              const glm::dvec3 col = blackbody_color(g * (0.45 + 1.10 * temp));
+              const double lum = bright * disk_exposure;
+              const double tone = std::pow(lum / (1.0 + lum), 1.0 / 2.2);  // Reinhard + gamma
+              acc_r += 255.0 * col[0] * tone;
+              acc_g += 255.0 * col[1] * tone;
+              acc_b += 255.0 * col[2] * tone;
               break;
             }
             case RayOutcome::Escaped:

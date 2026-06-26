@@ -172,6 +172,8 @@ List the essential functional features of the solution. Each feature must be a s
 
 9. **State machine** — transitions between MENU → SIM_BLACKHOLE and MENU → SIM_GRAVITY. Essential for switching between the two simulation modes.
 
+10. **Cinematic main menu** — a styled title screen (engraved serif title, vertical menu list with an animated selection highlight, atmospheric corner text) presented over a full-screen black-hole background plate. The background plate is a high-quality image produced offline by the project's *own* reference renderer, so the menu is itself a product of the physics rather than decorative artwork. Essential as the entry point to the state machine (feature 9) and as the first impression of the solution for the classroom stakeholder. (Design detailed in "Design Direction — Cinematic Main Menu"; planned for the presentation iteration once the real-time engine exists.)
+
 ---
 
 ## A4 — Limitations of Proposed Solution
@@ -471,3 +473,28 @@ The first render (correct physics, default exposure) came out **almost entirely 
 15. `screenshots/iteration_3/iter3_kerr_render_output.png` — measured shadow asymmetry and ISCO inner edge.
 16. `screenshots/iteration_3/iter3_disk_beaming.png` — beaming brightness ratio (17×).
 17. `screenshots/iteration_3/iter3_ctest_gate4.png` — all 7 Catch2 suites passing.
+
+---
+
+# DESIGN DIRECTION — Cinematic Main Menu (planned presentation iteration)
+
+*(Forward-looking design, recorded now so the real-time engine's architecture reserves room for it rather than retrofitting later. It belongs to the presentation iteration that follows the GPU engine work — it depends on a window existing on screen but not on the live geodesic renderer, because the background is a pre-rendered plate. No code for it has been written yet.)*
+
+## 1. Design goal and inspiration
+The entry point to the state machine (Feature 9) should not be a plain list of buttons; for the classroom stakeholder the first impression matters. The target aesthetic is a cinematic, *Interstellar/Gargantua*-style title screen: a full-screen black-hole plate with an engraved serif title, a thin tagline, a vertical menu of square-bulleted items with an animated selection highlight, and low-opacity "lore" text in the corners. The reference frames in Figs. 18–21 (a community concept mock-up that styles a black-hole render as a game main menu) capture the look; note in Figs. 19–21 how the selection highlight moves down the list and the background composition shifts subtly between states.
+
+## 2. Key design decisions
+- **Menu items map to simulation actions**, keeping the cinematic styling: `ENTER SIMULATION` · `PRESETS` · `SETTINGS` · `GALLERY` · `ABOUT` · `EXIT`. The `PRESETS` sub-menu offers physically distinct targets: **Sgr A\*** (the calibration target), **M87\***, **Gargantua** (cinematic, near-face-on), and **Schwarzschild** (a\*=0 baseline). Each preset hands its parameters to the renderer on `ENTER SIMULATION`.
+- **The background is a pre-rendered plate, not the live renderer.** Running the full ray tracer while the user merely idles on the menu would waste GPU power and risk a non-smooth title screen. Instead the plate is rendered **once, offline, at high resolution and high supersampling by the project's own reference tracer** (the Iteration 3 pipeline). Two consequences follow: (i) the menu remains 100 % a product of the project's own physics — it is not stock artwork or film footage; and (ii) the plate doubles as the **quality benchmark** that the real-time mode is then required to match or exceed.
+
+## 3. Implementation outline (two decoupled parts)
+- **(a) Hero plate — offline asset.** Buildable directly on the existing reference tracer (`physics/tools/render_kerr_disk.cpp`, `render_image()` in `physics/src/raytrace_cpu.cpp`): tune the camera near face-on so the disk wraps symmetrically over and under the shadow, then add — *to the offline tool only, leaving the validated physics untouched* — a starfield background for escaped rays (replacing the current gradient), an optional planet billboard, and a left-side vignette for text legibility. Output a high-resolution plate per preset.
+- **(b) Menu shell — UI layer.** Built with Dear ImGui (the project's planned GUI library) drawn over a full-screen textured quad of the plate: a loaded serif display font, wide letter-spacing, square-bullet items with an animated hover highlight, corner text, and the `MainMenu ↔ Simulation ↔ Settings/Presets` state transitions. Cheap "life" (slow parallax drift of the plate, a subtle glow pulse, star twinkle) is added in the UI layer so no video playback is needed.
+
+This feature is purely **additive** presentation work: it never modifies the geodesic or metric code and therefore cannot affect any physics-correctness gate.
+
+### Figures
+18. `screenshots/design_menu/menu_ref_pov_intro.png` — reference: black-hole plate framed as a full-screen title card.
+19. `screenshots/design_menu/menu_ref_state_newgame.png` — reference: full menu layout (serif title, tagline, square-bulleted list, corner text).
+20. `screenshots/design_menu/menu_ref_state_load.png` — reference: selection highlight moved down the list (animated hover state).
+21. `screenshots/design_menu/menu_ref_state_options.png` — reference: highlight and background composition shifted again.

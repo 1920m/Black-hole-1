@@ -282,6 +282,23 @@ Name screenshots descriptively: `iter1_cmake_config.png`, `iter1_kerr_metric_err
 - Compare against `physics/benches/geodesic_bench.cpp` (Google Benchmark baseline)
 - Optimize shader occupancy, memory access patterns
 
+### Phase 10 — Cinematic main menu & application shell (presentation layer)
+Styled *Interstellar/Gargantua*-look title screen (engraved serif title, vertical menu with an
+animated square-bullet selection highlight, corner "lore" text). Purely additive presentation work —
+**must not touch geodesic/metric code**, so it cannot affect any correctness gate.
+- **Menu labels = simulation actions**: `ENTER SIMULATION · PRESETS · SETTINGS · GALLERY · ABOUT ·
+  EXIT`. PRESETS = Sgr A* / M87* / Gargantua / Schwarzschild; each hands params to the renderer.
+- **Background = a PRE-RENDERED plate, NOT the live renderer** (perf — no GPU load while idling).
+  The plate is rendered **offline by our own reference tracer** (high-res/high-SSAA), so it stays
+  100% real physics and doubles as the **quality benchmark** the real-time mode must match/beat.
+- **Two decoupled parts:** (a) *hero plate* — buildable now on the Phase-1/3/4 CPU tracer
+  (`render_kerr_disk.cpp` / `render_image()`); add starfield + optional planet + left vignette to the
+  **offline tool only**. (b) *menu shell* — Dear ImGui over a full-screen textured quad of the plate;
+  needs only Phase 5 (a window) + a minimal ImGui bring-up, **not** Phase 6 live geodesics.
+- **Gate**: app boots to the styled menu; `ENTER SIMULATION`/presets transition to the live render
+  and back cleanly; zero Vulkan validation errors. (Full design + reference frames: `writeup.md`
+  "Design Direction — Cinematic Main Menu" and `writeup/screenshots/design_menu/`.)
+
 ---
 
 ## 7. Project file structure
